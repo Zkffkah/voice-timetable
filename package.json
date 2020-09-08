@@ -1,0 +1,76 @@
+{
+    "name": "voice-clock",
+    "productName": "Voice Clock",
+    "description": "Voice clock app for voice notification of the current time",
+    "version": "0.1.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/GrafSoul/voice-clock.git"
+    },
+    "author": "Dmitriy Zatulovskiy <grafsoul@gmail.com> (https://networkroom.ru)",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/GrafSoul/voice-clock/issues"
+    },
+    "private": true,
+    "dependencies": {
+        "electron-devtools-installer": "^3.1.1",
+        "electron-is-dev": "^1.2.0",
+        "electron-log": "^4.2.4",
+        "electron-updater": "^4.3.4",
+        "node-notifier": "^8.0.0",
+        "react": "^16.13.1",
+        "react-dom": "^16.13.1",
+        "react-redux": "^7.2.1",
+        "react-router-dom": "^5.2.0",
+        "react-scripts": "^3.4.3",
+        "reactstrap": "^8.5.1",
+        "redux": "^4.0.5",
+        "redux-thunk": "^2.3.0"
+    },
+    "scripts": {
+        "react-start": "react-scripts start",
+        "react-build": "react-scripts build",
+        "react-test": "react-scripts test --env=jsdom",
+        "react-eject": "react-scripts eject",
+        "electron-build": "electron-builder",
+        "release": "yarn react-build && electron-builder --publish=always",
+        "build": "yarn react-build && yarn electron-build",
+        "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\"",
+        "prettier": "prettier --single-quote --write \"./src/**/*.js\""
+    },
+    "eslintConfig": {
+        "extends": "react-app"
+    },
+    "browserslist": [
+        ">0.2%",
+        "not dead",
+        "not ie <= 11",
+        "not op_mini all"
+    ],
+    "devDependencies": {
+        "concurrently": "^5.3.0",
+        "cross-env": "^7.0.2",
+        "electron": "^10.1.1",
+        "electron-builder": "^22.8.0",
+        "electron-debug": "^3.1.0",
+        "prettier": "^2.1.1",
+        "wait-on": "^5.2.0"
+    },
+    "main": "public/electron.js",
+    "homepage": "./",
+    "build": {
+        "appId": "com.example.reactron",
+        "files": [
+            "build/**/*",
+            "node_modules/**/*",
+            "package.json"
+        ],
+        "directories": {
+            "buildResources": "assets"
+        },
+        "publish": {
+            "provider": "github"
+        }
+    }
+}
