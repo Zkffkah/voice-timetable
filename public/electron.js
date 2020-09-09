@@ -44,7 +44,7 @@ const createWindow = async () => {
         mainWindow.show();
         if (isDev) {
             installExtension(REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS);
-            mainWindow.webContents.openDevTools();
+            // mainWindow.webContents.openDevTools();
         }
     });
 

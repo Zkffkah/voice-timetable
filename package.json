@@ -1,6 +1,6 @@
 {
     "name": "voice-clock",
-    "productName": "Voice Clock",
+    "productName": "VoiceClock",
     "description": "Voice clock app for voice notification of the current time",
     "version": "0.1.0",
     "repository": {
