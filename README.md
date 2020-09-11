@@ -30,6 +30,6 @@ npm release
 yarn release
 ```
 
-&#169; 2020 | Reactron | Voice Clock | [MIT licensed].
+&#169; 2020 | Voice Clock | [MIT licensed].
 
 [mit licensed]: https://github.com/GrafSoul/voice-clock/blob/master/LICENSE
