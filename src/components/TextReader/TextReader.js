@@ -11,23 +11,23 @@ import {
     Col,
 } from 'reactstrap';
 
-import classes from './TextReader.module.css';
+import classes from './TextReader.module.scss';
 
-const timeData = [
-    '8:00',
-    '8:05',
-    '8:10',
-    '8:15',
-    '8:20',
-    '8:25',
-    '8:30',
-    '8:35',
-    '8:40',
-    '8:45',
-    '8:50',
-    '8:55',
-    '9:00',
-];
+// const timeData = [
+//     '8:00',
+//     '8:05',
+//     '8:10',
+//     '8:15',
+//     '8:20',
+//     '8:25',
+//     '8:30',
+//     '8:35',
+//     '8:40',
+//     '8:45',
+//     '8:50',
+//     '8:55',
+//     '9:00',
+// ];
 
 const TextReader = ({ currentTime }) => {
     const compatibility = useRef(true);
@@ -51,10 +51,7 @@ const TextReader = ({ currentTime }) => {
 
     useEffect(() => {
         injectVoices(voices.current, speechSynthesis.getVoices());
-
-        timeData.forEach((time) => {
-            // handlerSpeak(time);
-        });
+        handlerSpeak();
     }, [voices]);
 
     const injectVoices = (voicesElement, voices) => {
@@ -75,7 +72,7 @@ const TextReader = ({ currentTime }) => {
             .join('');
     };
 
-    const handlerSpeak = (currentTime) => {
+    const handlerSpeak = () => {
         let selectedOption =
             voices.current.options[voices.current.selectedIndex];
         let selectedVoice = speechSynthesis
@@ -88,7 +85,7 @@ const TextReader = ({ currentTime }) => {
             })
             .pop();
 
-        utterance.text = currentTime;
+        utterance.text = text;
         utterance.voice = selectedVoice;
         utterance.lang = selectedVoice.lang;
         utterance.rate = rate;
@@ -155,6 +152,28 @@ const TextReader = ({ currentTime }) => {
         <>
             {compatibility.current ? (
                 <Container className={classes.content}>
+                    <ul>
+                        <li>
+                            <input type="radio" name="time_ratio" id="" /> every
+                            five minutes
+                        </li>
+                        <li>
+                            <input type="radio" name="time_ratio" id="" /> every
+                            five minutes
+                        </li>
+                        <li>
+                            <input type="radio" name="time_ratio" id="" /> every
+                            fifteen minutes
+                        </li>
+                        <li>
+                            <input type="radio" name="time_ratio" id="" /> every
+                            thirty minutes
+                        </li>
+                        <li>
+                            <input type="radio" name="time_ratio" id="" /> every
+                            hour
+                        </li>
+                    </ul>
                     <div
                         className={isSpeak ? null : classes.curtainBlocked}
                         onClick={(e) => handler(e)}

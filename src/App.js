@@ -1,20 +1,21 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
+import Header from './components/Header/Header';
 import Clock from './components/Clock/Clock';
 import TextReader from './components/TextReader/TextReader';
 import './App.css';
 
-class App extends Component {
-    render() {
-        return (
-            <div>
-                <header className="App-header">
-                    <Clock />
-                    <TextReader currentTime={'Это строка - 8:30'} />
-                </header>
-            </div>
-        );
-    }
-}
+const App = () => {
+    const [currentTime, setCurrentTime] = useState('');
+    return (
+        <div>
+            <header className="App-header">
+                <Header />
+                <Clock setCurrentTime={setCurrentTime} />
+                <TextReader currentTime={currentTime} />
+            </header>
+        </div>
+    );
+};
 
 export default App;
