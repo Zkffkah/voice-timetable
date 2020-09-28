@@ -31,7 +31,7 @@ const Header = () => {
             <div className={classes.topBar}>
                 <div className={classes.title}>
                     <i className="fas fa-podcast"></i>
-                    Talker
+                    Voice Clock
                 </div>
                 <div>
                     <button

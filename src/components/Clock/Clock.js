@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 
 import classes from './Clock.module.scss';
 
-const Clock = ({ setCurrentTime }) => {
+const Clock = () => {
     const [date, setData] = useState(new Date());
     const time = useRef(null);
     const day = useRef(new Date().getDay());
@@ -11,14 +11,10 @@ const Clock = ({ setCurrentTime }) => {
 
     useEffect(() => {
         time.current = setInterval(() => setData(new Date()), 1000);
-        setTimeout(() => {
-            setCurrentTime(time.current);
-            console.log(time.current);
-        }, 50000);
     });
 
     return (
-        <div>
+        <div className={classes.clockContent}>
             <div className={classes.digitalTime}>
                 {date.toLocaleTimeString()}
             </div>

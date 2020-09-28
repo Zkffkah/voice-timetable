@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
     Container,
     Row,
-    Jumbotron,
     Button,
     Form,
     FormGroup,
@@ -13,22 +12,6 @@ import {
 
 import classes from './TextReader.module.scss';
 
-// const timeData = [
-//     '8:00',
-//     '8:05',
-//     '8:10',
-//     '8:15',
-//     '8:20',
-//     '8:25',
-//     '8:30',
-//     '8:35',
-//     '8:40',
-//     '8:45',
-//     '8:50',
-//     '8:55',
-//     '9:00',
-// ];
-
 const TextReader = ({ currentTime }) => {
     const compatibility = useRef(true);
     const voices = useRef(null);
@@ -36,6 +19,7 @@ const TextReader = ({ currentTime }) => {
     const [text, setText] = useState(currentTime);
     const [rate, setRate] = useState(1);
     const [pitch, setPitch] = useState(1);
+    const [volume, setVolume] = useState(1);
 
     const [isPaused, setIsPaused] = useState(true);
     const [isSpeak, setIsSpeak] = useState(true);
@@ -50,9 +34,16 @@ const TextReader = ({ currentTime }) => {
     }
 
     useEffect(() => {
-        injectVoices(voices.current, speechSynthesis.getVoices());
-        handlerSpeak();
+        setTimeout(() => {
+            injectVoices(voices.current, speechSynthesis.getVoices());
+        }, 1000);
     }, [voices]);
+
+    useEffect(() => {
+        setInterval(() => {
+            setText(currentTime);
+        }, 5000);
+    }, [currentTime]);
 
     const injectVoices = (voicesElement, voices) => {
         voicesElement.innerHTML = voices
@@ -90,6 +81,7 @@ const TextReader = ({ currentTime }) => {
         utterance.lang = selectedVoice.lang;
         utterance.rate = rate;
         utterance.pitch = pitch;
+        utterance.volume = volume;
 
         speechSynthesis.speak(utterance);
         setIsPaused(false);
@@ -132,6 +124,13 @@ const TextReader = ({ currentTime }) => {
         setIsSpeak(true);
     };
 
+    const handlerVolume = (e) => {
+        setVolume(e.target.value);
+        speechSynthesis.cancel();
+        setIsPaused(false);
+        setIsSpeak(true);
+    };
+
     const handlerText = (e) => {
         setText(e.target.value);
         if (text === '') {
@@ -152,7 +151,7 @@ const TextReader = ({ currentTime }) => {
         <>
             {compatibility.current ? (
                 <Container className={classes.content}>
-                    <ul>
+                    <ul className={classes.listOption}>
                         <li>
                             <input type="radio" name="time_ratio" id="" /> every
                             five minutes
@@ -179,125 +178,129 @@ const TextReader = ({ currentTime }) => {
                         onClick={(e) => handler(e)}
                     ></div>
                     <div className={classes.contentWrap}>
-                        <Jumbotron className={classes.jumbotron}>
-                            <Form action="" method="get">
-                                <FormGroup className={classes.formGroup}>
-                                    <div
-                                        className={
-                                            isSpeak
-                                                ? null
-                                                : classes.textareaBlocked
-                                        }
-                                    ></div>
-                                    <Input
-                                        disabled={isSpeak ? false : true}
-                                        type="textarea"
-                                        id="text"
-                                        className={classes.inputText}
-                                        value={text}
-                                        onChange={(e) => handlerText(e)}
-                                        onClick={(e) => handler(e)}
-                                    ></Input>
-                                </FormGroup>
-                                <FormGroup className={classes.formGroup}>
-                                    <Label for="voice">Voice:</Label>
-                                    <select
-                                        className="form-control"
-                                        id="voice"
-                                        ref={voices}
-                                        onChange={handlerVoice}
-                                    ></select>
-                                </FormGroup>
-                                <Row form className={classes.formGroup}>
-                                    <Col md={6}>
-                                        <FormGroup
-                                            className={classes.rangeInput}
-                                        >
-                                            <Label for="rate">
-                                                Rate: <b>{rate}</b>
-                                            </Label>
-                                            <Input
-                                                type="range"
-                                                id="rate"
-                                                min="0.1"
-                                                max="2"
-                                                value={rate}
-                                                step="0.1"
-                                                onChange={(e) => handlerRate(e)}
-                                            />
-                                        </FormGroup>
-                                    </Col>
-                                    <Col md={6}>
-                                        <FormGroup
-                                            className={classes.rangeInput}
-                                        >
-                                            <Label for="pitch">
-                                                Pitch: <b>{pitch}</b>
-                                            </Label>
-                                            <Input
-                                                type="range"
-                                                id="pitch"
-                                                min="0.1"
-                                                max="2"
-                                                value={pitch}
-                                                step="0.1"
-                                                onChange={(e) =>
-                                                    handlerPitch(e)
-                                                }
-                                            />
-                                        </FormGroup>
-                                    </Col>
-                                </Row>
+                        <Form action="" method="get">
+                            <FormGroup className={classes.formGroup}>
+                                <div
+                                    className={
+                                        isSpeak ? null : classes.textareaBlocked
+                                    }
+                                ></div>
+                                <Input
+                                    disabled={isSpeak ? false : true}
+                                    type="textarea"
+                                    id="text"
+                                    className={classes.inputText}
+                                    value={text}
+                                    onChange={(e) => handlerText(e)}
+                                    onClick={(e) => handler(e)}
+                                ></Input>
+                            </FormGroup>
+                            <FormGroup className={classes.formGroup}>
+                                <Label for="voice">Voice:</Label>
+                                <select
+                                    className="form-control"
+                                    id="voice"
+                                    ref={voices}
+                                    onChange={handlerVoice}
+                                ></select>
+                            </FormGroup>
+                            <Row form className={classes.formGroup}>
+                                <Col md={6}>
+                                    <FormGroup className={classes.rangeInput}>
+                                        <Label for="rate">
+                                            Rate: <b>{rate}</b>
+                                        </Label>
+                                        <Input
+                                            type="range"
+                                            id="rate"
+                                            min="0.1"
+                                            max="2"
+                                            value={rate}
+                                            step="0.1"
+                                            onChange={(e) => handlerRate(e)}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                                <Col md={6}>
+                                    <FormGroup className={classes.rangeInput}>
+                                        <Label for="pitch">
+                                            Pitch: <b>{pitch}</b>
+                                        </Label>
+                                        <Input
+                                            type="range"
+                                            id="pitch"
+                                            min="0.1"
+                                            max="2"
+                                            value={pitch}
+                                            step="0.1"
+                                            onChange={(e) => handlerPitch(e)}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                                <Col md={6}>
+                                    <FormGroup className={classes.rangeInput}>
+                                        <Label for="volume">
+                                            Volume: <b>{volume}</b>
+                                        </Label>
+                                        <Input
+                                            type="range"
+                                            id="volume"
+                                            min="0.1"
+                                            max="2"
+                                            value={volume}
+                                            step="0.1"
+                                            onChange={(e) => handlerVolume(e)}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
 
-                                <FormGroup className={classes.buttonGroup}>
-                                    {isSpeak ? (
-                                        <Button
-                                            disabled={!text ? true : false}
-                                            type="button"
-                                            id="button-speak"
-                                            color="success"
-                                            className={classes.button}
-                                            onClick={handlerSpeak}
-                                        >
-                                            <i className="fas fa-play"></i>{' '}
-                                            Speak
-                                        </Button>
-                                    ) : (
-                                        <Button
-                                            type="button"
-                                            id="button-continue"
-                                            color="info"
-                                            className={classes.button}
-                                            onClick={handlerContinue}
-                                        >
-                                            <i className="fas fa-play"></i>{' '}
-                                            Speak
-                                        </Button>
-                                    )}
-                                    <Button
-                                        disabled={!isPaused ? false : true}
-                                        type="button"
-                                        id="button-pause"
-                                        color="info"
-                                        className={classes.button}
-                                        onClick={handlerPause}
-                                    >
-                                        <i className="fas fa-pause"></i> Pause
-                                    </Button>
-
+                            <FormGroup className={classes.buttonGroup}>
+                                {isSpeak ? (
                                     <Button
                                         disabled={!text ? true : false}
                                         type="button"
-                                        id="button-stop"
-                                        color="danger"
+                                        id="button-speak"
+                                        color="success"
                                         className={classes.button}
-                                        onClick={handlerStop}
+                                        onClick={handlerSpeak}
                                     >
-                                        <i className="fas fa-stop"></i> Stop
+                                        <i className="fas fa-play"></i> Speak
                                     </Button>
-                                </FormGroup>
-                            </Form>
-                        </Jumbotron>
+                                ) : (
+                                    <Button
+                                        type="button"
+                                        id="button-continue"
+                                        color="info"
+                                        className={classes.button}
+                                        onClick={handlerContinue}
+                                    >
+                                        <i className="fas fa-play"></i> Speak
+                                    </Button>
+                                )}
+                                <Button
+                                    disabled={!isPaused ? false : true}
+                                    type="button"
+                                    id="button-pause"
+                                    color="info"
+                                    className={classes.button}
+                                    onClick={handlerPause}
+                                >
+                                    <i className="fas fa-pause"></i> Pause
+                                </Button>
+
+                                <Button
+                                    disabled={!text ? true : false}
+                                    type="button"
+                                    id="button-stop"
+                                    color="danger"
+                                    className={classes.button}
+                                    onClick={handlerStop}
+                                >
+                                    <i className="fas fa-stop"></i> Stop
+                                </Button>
+                            </FormGroup>
+                        </Form>
                     </div>
                 </Container>
             ) : (
