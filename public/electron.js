@@ -30,21 +30,20 @@ const createWindow = async () => {
     installExtension(REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS);
 
     let mainWindowState = windowStateKeeper({
-        defaultWidth: 600,
-        defaultHeight: 600,
+        defaultWidth: 320,
+        defaultHeight: 420,
     });
 
     mainWindow = new BrowserWindow({
         title: 'Voice Clock',
         show: false,
         frame: false,
+        resizable: false,
         icon: getIcon(),
         x: mainWindowState.x,
         y: mainWindowState.y,
         width: mainWindowState.width,
         height: mainWindowState.height,
-        minWidth: 300,
-        minHeight: 300,
         titleBarStyle: 'hidden',
         backgroundColor: '#282c34',
         webPreferences: {
