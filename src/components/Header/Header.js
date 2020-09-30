@@ -5,7 +5,7 @@ import classes from './Header.module.scss';
 const { remote } = window.require('electron');
 const mainWindow = remote.getCurrentWindow();
 
-const Header = () => {
+const Header = ({ setIsSettings, isSettings }) => {
     const [status, setStatus] = useState(false);
 
     const handleMinimizeWindow = () => {
@@ -26,6 +26,11 @@ const Header = () => {
         mainWindow.close();
     };
 
+    const handleIsSettings = () => {
+        console.log(isSettings);
+        setIsSettings(!isSettings);
+    };
+
     return (
         <div className={classes.header}>
             <div className={classes.topBar}>
@@ -33,6 +38,12 @@ const Header = () => {
                     <i className="fas fa-podcast"></i> Voice Clock
                 </div>
                 <div>
+                    <button
+                        className={classes.btnWindow}
+                        onClick={handleIsSettings}
+                    >
+                        <i className="fal fa-bars"></i>
+                    </button>
                     <button
                         className={classes.btnWindow}
                         onClick={handleMinimizeWindow}

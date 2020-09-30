@@ -5,6 +5,9 @@ body {
     -moz-osx-font-smoothing: grayscale;
     font-size: 16px;
     color: white;
+    background: #0f3854;
+    background: radial-gradient(ellipse at center, #0a2e38 0%, #000000 70%);
+    background-size: 100%;
 }
 
 @font-face {

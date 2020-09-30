@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-// import classes from './TimeReader.module.scss';
+import classes from './TimeReader.module.scss';
 
+// eslint-disable-next-line
 const template = {
     five: [
         '00',
@@ -25,7 +26,6 @@ const template = {
 };
 
 const TextReader = ({ hours, min, currentTime }) => {
-    const compatibility = useRef(true);
     const voices = useRef(null);
 
     const [text, setText] = useState(currentTime);
@@ -33,31 +33,15 @@ const TextReader = ({ hours, min, currentTime }) => {
     const [pitch, setPitch] = useState(1);
     const [volume, setVolume] = useState(1);
 
-    const [isPaused, setIsPaused] = useState(true);
-    const [isSpeak, setIsSpeak] = useState(true);
-
     const utterance = new SpeechSynthesisUtterance();
+    // eslint-disable-next-line
     const voicesAvailable = speechSynthesis.getVoices();
-
-    if (window.SpeechSynthesisUtterance === undefined && !voicesAvailable) {
-        compatibility.current = false;
-    } else {
-        compatibility.current = true;
-    }
 
     useEffect(() => {
         setTimeout(() => {
             injectVoices(voices.current, speechSynthesis.getVoices());
         }, 1000);
     }, [voices]);
-
-    useEffect(() => {
-        setInterval(() => {
-            // setText(currentTime);
-            console.log(currentTime);
-            // handlerSpeak();
-        }, 1000);
-    }, [currentTime]);
 
     const injectVoices = (voicesElement, voices) => {
         voicesElement.innerHTML = voices
@@ -98,103 +82,98 @@ const TextReader = ({ hours, min, currentTime }) => {
         utterance.volume = volume;
 
         speechSynthesis.speak(utterance);
-        setIsPaused(false);
-        setIsSpeak(false);
-    };
-
-    const handlerStop = () => {
-        speechSynthesis.cancel();
-        setIsPaused(false);
-        setIsSpeak(true);
-    };
-
-    const handlerPause = () => {
-        speechSynthesis.pause();
-        setIsPaused(true);
-    };
-
-    const handlerContinue = () => {
-        speechSynthesis.resume();
-        setIsPaused(false);
     };
 
     const handlerVoice = () => {
         speechSynthesis.cancel();
-        setIsPaused(false);
-        setIsSpeak(true);
     };
 
     const handlerRate = (e) => {
         setRate(e.target.value);
         speechSynthesis.cancel();
-        setIsPaused(false);
-        setIsSpeak(true);
     };
 
     const handlerPitch = (e) => {
         setPitch(e.target.value);
         speechSynthesis.cancel();
-        setIsPaused(false);
-        setIsSpeak(true);
     };
 
     const handlerVolume = (e) => {
         setVolume(e.target.value);
         speechSynthesis.cancel();
-        setIsPaused(false);
-        setIsSpeak(true);
     };
 
     const handlerText = (e) => {
         setText(e.target.value);
         if (text === '') {
-            setIsSpeak(true);
         }
         speechSynthesis.cancel();
-        setIsPaused(false);
-        setIsSpeak(true);
     };
 
     function handler(e) {
         speechSynthesis.cancel();
-        setIsPaused(false);
-        setIsSpeak(true);
     }
 
     return (
         <>
-            <div>
-                <ul>
+            <div className={classes.settingsContent}>
+                <ul className={classes.settingsMinutes}>
                     <li>
-                        <input type="radio" name="time_ratio" id="" />
-                        every five minutes
+                        <input
+                            type="radio"
+                            name="time_ratio"
+                            id="five-minutes"
+                        />
+                        <label htmlFor="five-minutes">every five minutes</label>
                     </li>
                     <li>
-                        <input type="radio" name="time_ratio" id="" />
-                        every ten minutes
+                        <input
+                            type="radio"
+                            name="time_ratio"
+                            id="ten-minutes"
+                        />
+                        <label htmlFor="ten-minutes">every ten minutes</label>
                     </li>
                     <li>
-                        <input type="radio" name="time_ratio" id="" />
-                        every fifteen minutes
+                        <input
+                            type="radio"
+                            name="time_ratio"
+                            id="fifteen-minutes"
+                        />
+                        <label htmlFor="fifteen-minutes">
+                            every fifteen minutes
+                        </label>
                     </li>
                     <li>
-                        <input type="radio" name="time_ratio" id="" />
-                        every twenty minutes
+                        <input
+                            type="radio"
+                            name="time_ratio"
+                            id="twenty-minutes"
+                        />
+                        <label htmlFor="twenty-minutes">
+                            every twenty minutes
+                        </label>
                     </li>
                     <li>
-                        <input type="radio" name="time_ratio" id="" />
-                        every thirty minutes
+                        <input
+                            type="radio"
+                            name="time_ratio"
+                            id="thirty-minutes"
+                        />
+                        <label htmlFor="thirty-minutes">
+                            every thirty minutes
+                        </label>
                     </li>
                     <li>
-                        <input type="radio" name="time_ratio" id="" />
-                        every hour
+                        <input type="radio" name="time_ratio" id="every-hour" />
+                        <label htmlFor="every-hour">every hour</label>
                     </li>
                 </ul>
                 <div>
                     <form action="" method="get">
                         <div>
                             <input
-                                type="textarea"
+                                type="hidden"
                                 id="text"
                                 value={text}
                                 onChange={(e) => handlerText(e)}
@@ -202,7 +181,7 @@ const TextReader = ({ hours, min, currentTime }) => {
                             ></input>
                         </div>
                         <div>
-                            <label for="voice">Voice:</label>
+                            <label htmlFor="voice">Voice:</label>
                             <select
                                 id="voice"
                                 ref={voices}
@@ -212,7 +191,7 @@ const TextReader = ({ hours, min, currentTime }) => {
                         <div>
                             <div>
                                 <div>
-                                    <label for="rate">
+                                    <label htmlFor="rate">
                                         Rate: <b>{rate}</b>
                                     </label>
                                     <input
@@ -228,7 +207,7 @@ const TextReader = ({ hours, min, currentTime }) => {
                             </div>
                             <div>
                                 <div>
-                                    <label for="pitch">
+                                    <label htmlFor="pitch">
                                         Pitch: <b>{pitch}</b>
                                     </label>
                                     <input
@@ -244,7 +223,7 @@ const TextReader = ({ hours, min, currentTime }) => {
                             </div>
                             <div>
                                 <div>
-                                    <label for="volume">
+                                    <label htmlFor="volume">
                                         Volume: <b>{volume}</b>
                                     </label>
                                     <input
@@ -261,43 +240,13 @@ const TextReader = ({ hours, min, currentTime }) => {
                         </div>
 
                         <div>
-                            {isSpeak ? (
-                                <button
-                                    disabled={!text ? true : false}
-                                    type="button"
-                                    id="button-speak"
-                                    onClick={handlerSpeak}
-                                >
-                                    <i className="fas fa-play"></i> Speak
-                                </button>
-                            ) : (
-                                <button
-                                    type="button"
-                                    id="button-continue"
-                                    color="info"
-                                    onClick={handlerContinue}
-                                >
-                                    <i className="fas fa-play"></i> Speak
-                                </button>
-                            )}
-                            <button
-                                disabled={!isPaused ? false : true}
-                                type="button"
-                                id="button-pause"
-                                color="info"
-                                onClick={handlerPause}
-                            >
-                                <i className="fas fa-pause"></i> Pause
-                            </button>
-
                             <button
                                 disabled={!text ? true : false}
                                 type="button"
-                                id="button-stop"
-                                color="danger"
-                                onClick={handlerStop}
+                                id="button-speak"
+                                onClick={handlerSpeak}
                             >
-                                <i className="fas fa-stop"></i> Stop
+                                <i className="fas fa-play"></i> Test
                             </button>
                         </div>
                     </form>

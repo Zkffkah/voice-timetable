@@ -1,0 +1,22 @@
+.settingsContent {
+    padding: 50px 0 0;
+    display: flex;
+}
+
+.settingsMinutes {
+    margin: 0;
+    padding: 0;
+    display: block;
+    list-style: none;
+    width: 400px;
+}
+
+.settingsMinutes li {
+    margin: 0 0 10px;
+    list-style: none;
+}
+
+.settingsMinutes input {
+    display: inline-block;
+    margin-right: 10px;
+}
