@@ -25,7 +25,7 @@ const template = {
     hour: ['00'],
 };
 
-const TextReader = ({ hours, min, currentTime }) => {
+const TextReader = ({ hours, min, currentTime, period, setPeriod }) => {
     const voices = useRef(null);
 
     const [text, setText] = useState(currentTime);
@@ -110,149 +110,110 @@ const TextReader = ({ hours, min, currentTime }) => {
         speechSynthesis.cancel();
     };
 
+    const handlerSelectTime = (e) => {
+        e.stopPropagation();
+        setPeriod(e.target.value);
+    };
+
     function handler(e) {
         speechSynthesis.cancel();
     }
 
     return (
-        <>
+        <div className={classes.settings}>
             <div className={classes.settingsContent}>
-                <ul className={classes.settingsMinutes}>
-                    <li>
-                        <input
-                            type="radio"
-                            name="time_ratio"
-                            id="five-minutes"
-                        />
-                        <label htmlFor="five-minutes">every five minutes</label>
-                    </li>
-                    <li>
-                        <input
-                            type="radio"
-                            name="time_ratio"
-                            id="ten-minutes"
-                        />
-                        <label htmlFor="ten-minutes">every ten minutes</label>
-                    </li>
-                    <li>
-                        <input
-                            type="radio"
-                            name="time_ratio"
-                            id="fifteen-minutes"
-                        />
-                        <label htmlFor="fifteen-minutes">
-                            every fifteen minutes
-                        </label>
-                    </li>
-                    <li>
-                        <input
-                            type="radio"
-                            name="time_ratio"
-                            id="twenty-minutes"
-                        />
-                        <label htmlFor="twenty-minutes">
-                            every twenty minutes
-                        </label>
-                    </li>
-                    <li>
-                        <input
-                            type="radio"
-                            name="time_ratio"
-                            id="thirty-minutes"
-                        />
-                        <label htmlFor="thirty-minutes">
-                            every thirty minutes
-                        </label>
-                    </li>
-                    <li>
-                        <input type="radio" name="time_ratio" id="every-hour" />
-                        <label htmlFor="every-hour">every hour</label>
-                    </li>
-                </ul>
-                <div>
-                    <form action="" method="get">
-                        <div>
-                            <input
-                                type="hidden"
-                                id="text"
-                                value={text}
-                                onChange={(e) => handlerText(e)}
-                                onClick={(e) => handler(e)}
-                            ></input>
-                        </div>
-                        <div>
-                            <label htmlFor="voice">Voice:</label>
-                            <select
-                                id="voice"
-                                ref={voices}
-                                onChange={handlerVoice}
-                            ></select>
-                        </div>
-                        <div>
-                            <div>
-                                <div>
-                                    <label htmlFor="rate">
-                                        Rate: <b>{rate}</b>
-                                    </label>
-                                    <input
-                                        type="range"
-                                        id="rate"
-                                        min="0.1"
-                                        max="2"
-                                        value={rate}
-                                        step="0.1"
-                                        onChange={(e) => handlerRate(e)}
-                                    />
-                                </div>
-                            </div>
-                            <div>
-                                <div>
-                                    <label htmlFor="pitch">
-                                        Pitch: <b>{pitch}</b>
-                                    </label>
-                                    <input
-                                        type="range"
-                                        id="pitch"
-                                        min="0.1"
-                                        max="2"
-                                        value={pitch}
-                                        step="0.1"
-                                        onChange={(e) => handlerPitch(e)}
-                                    />
-                                </div>
-                            </div>
-                            <div>
-                                <div>
-                                    <label htmlFor="volume">
-                                        Volume: <b>{volume}</b>
-                                    </label>
-                                    <input
-                                        type="range"
-                                        id="volume"
-                                        min="0.1"
-                                        max="2"
-                                        value={volume}
-                                        step="0.1"
-                                        onChange={(e) => handlerVolume(e)}
-                                    />
-                                </div>
-                            </div>
-                        </div>
+                <div className={classes.settingsLeftColumn}>
+                    <div className={classes.settingsMinutes}>
+                        <label htmlFor="selectTime">Period of time</label>
+                        <select
+                            name="selectTime"
+                            id="selectTime"
+                            onChange={(e) => handlerSelectTime(e)}
+                        >
+                            <option default value="0">
+                                every hour
+                            </option>
+                            <option value="5">every five minutes</option>
+                            <option value="10">every ten minutes</option>
+                            <option value="15">every fifteen minutes</option>
+                            <option value="20">every twenty minutes</option>
+                            <option value="30">every thirty minutes</option>
+                        </select>
+                    </div>
+                    <div className={classes.settingsVoice}>
+                        <label htmlFor="voice">Voice:</label>
+                        <select
+                            id="voice"
+                            ref={voices}
+                            onChange={handlerVoice}
+                        ></select>
+                    </div>
+                </div>
 
-                        <div>
-                            <button
-                                disabled={!text ? true : false}
-                                type="button"
-                                id="button-speak"
-                                onClick={handlerSpeak}
-                            >
-                                <i className="fas fa-play"></i> Test
-                            </button>
-                        </div>
-                    </form>
+                <div className={classes.settingsRightColumn}>
+                    <input
+                        type="hidden"
+                        id="text"
+                        value={text}
+                        onChange={(e) => handlerText(e)}
+                        onClick={(e) => handler(e)}
+                    ></input>
+
+                    <div className={classes.settingsRange}>
+                        <label htmlFor="rate">
+                            Rate: <b>{rate}</b>
+                        </label>
+                        <input
+                            className={classes.range}
+                            type="range"
+                            id="rate"
+                            min="0.1"
+                            max="2"
+                            value={rate}
+                            step="0.1"
+                            onChange={(e) => handlerRate(e)}
+                        />
+
+                        <label htmlFor="pitch">
+                            Pitch: <b>{pitch}</b>
+                        </label>
+                        <input
+                            className={classes.range}
+                            type="range"
+                            id="pitch"
+                            min="0.1"
+                            max="2"
+                            value={pitch}
+                            step="0.1"
+                            onChange={(e) => handlerPitch(e)}
+                        />
+
+                        <label htmlFor="volume">
+                            Volume: <b>{volume}</b>
+                        </label>
+                        <input
+                            className={classes.range}
+                            type="range"
+                            id="volume"
+                            min="0.1"
+                            max="2"
+                            value={volume}
+                            step="0.1"
+                            onChange={(e) => handlerVolume(e)}
+                        />
+                    </div>
                 </div>
             </div>
-        </>
+            <button
+                className={classes.testButton}
+                disabled={!text ? true : false}
+                type="button"
+                id="button-speak"
+                onClick={handlerSpeak}
+            >
+                <i className="fas fa-play"></i> Test
+            </button>
+        </div>
     );
 };
 

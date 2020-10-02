@@ -27,7 +27,6 @@ const Header = ({ setIsSettings, isSettings }) => {
     };
 
     const handleIsSettings = () => {
-        console.log(isSettings);
         setIsSettings(!isSettings);
     };
 
