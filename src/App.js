@@ -17,7 +17,6 @@ const App = () => {
     const [min, setMin] = useState(moment().format('mm'));
     const [week, setWeek] = useState(moment().format('dddd'));
     const [pm, setPm] = useState(moment().format('a'));
-    const [period, setPeriod] = useState(0);
 
     useEffect(() => {
         setInterval(() => {
@@ -29,8 +28,6 @@ const App = () => {
             setPm(moment().format('a'));
         }, 1000);
     });
-
-    useEffect(() => {});
 
     return (
         <main className={classes.mainContent}>
@@ -46,8 +43,6 @@ const App = () => {
                     hours={hours}
                     min={min}
                     currentTime={`${hours}:${min}`}
-                    setPeriod={setPeriod}
-                    period={period}
                 />
             </div>
         </main>

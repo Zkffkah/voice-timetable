@@ -25,17 +25,25 @@ const template = {
     hour: ['00'],
 };
 
-const TextReader = ({ hours, min, currentTime, period, setPeriod }) => {
+const TextReader = ({ hours, min, currentTime }) => {
     const voices = useRef(null);
 
     const [text, setText] = useState(currentTime);
     const [rate, setRate] = useState(1);
     const [pitch, setPitch] = useState(1);
     const [volume, setVolume] = useState(1);
+    const [period, setPeriod] = useState('hour');
 
     const utterance = new SpeechSynthesisUtterance();
     // eslint-disable-next-line
     const voicesAvailable = speechSynthesis.getVoices();
+
+    useEffect(() => {
+        console.log(`${hours}:${min}`);
+        console.log(template[period]);
+        // handlerSpeak();
+        console.log('--------------------------------');
+    }, [period, hours, min, voices]);
 
     useEffect(() => {
         setTimeout(() => {
@@ -130,14 +138,16 @@ const TextReader = ({ hours, min, currentTime, period, setPeriod }) => {
                             id="selectTime"
                             onChange={(e) => handlerSelectTime(e)}
                         >
-                            <option default value="0">
+                            <option default value="hour">
                                 every hour
                             </option>
-                            <option value="5">every five minutes</option>
-                            <option value="10">every ten minutes</option>
-                            <option value="15">every fifteen minutes</option>
-                            <option value="20">every twenty minutes</option>
-                            <option value="30">every thirty minutes</option>
+                            <option value="five">every five minutes</option>
+                            <option value="ten">every ten minutes</option>
+                            <option value="fifteen">
+                                every fifteen minutes
+                            </option>
+                            <option value="twenty">every twenty minutes</option>
+                            <option value="thirty">every thirty minutes</option>
                         </select>
                     </div>
                     <div className={classes.settingsVoice}>
