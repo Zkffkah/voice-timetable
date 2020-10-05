@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 
 import classes from './TimeReader.module.scss';
 
-// eslint-disable-next-line
 const template = {
     five: [
         '00',
@@ -39,10 +38,12 @@ const TextReader = ({ hours, min, currentTime }) => {
     const voicesAvailable = speechSynthesis.getVoices();
 
     useEffect(() => {
-        console.log(`${hours}:${min}`);
-        console.log(template[period]);
-        // handlerSpeak();
-        console.log('--------------------------------');
+        template[period].forEach((item) => {
+            if (item === min) {
+                handlerSpeak(`${hours}:${min}`);
+            }
+        });
+        // eslint-disable-next-line
     }, [period, hours, min, voices]);
 
     useEffect(() => {
@@ -69,7 +70,7 @@ const TextReader = ({ hours, min, currentTime }) => {
             .join('');
     };
 
-    const handlerSpeak = () => {
+    const handlerSpeak = (time) => {
         let selectedOption =
             voices.current.options[voices.current.selectedIndex];
         let selectedVoice = speechSynthesis
@@ -82,7 +83,7 @@ const TextReader = ({ hours, min, currentTime }) => {
             })
             .pop();
 
-        utterance.text = text;
+        utterance.text = time;
         utterance.voice = selectedVoice;
         utterance.lang = selectedVoice.lang;
         utterance.rate = rate;
@@ -219,7 +220,7 @@ const TextReader = ({ hours, min, currentTime }) => {
                 disabled={!text ? true : false}
                 type="button"
                 id="button-speak"
-                onClick={handlerSpeak}
+                onClick={() => handlerSpeak(`${hours}:${min}`)}
             >
                 <i className="fas fa-play"></i> Test
             </button>
