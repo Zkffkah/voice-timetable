@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import classes from './Header.module.scss';
 
@@ -6,20 +6,8 @@ const { remote } = window.require('electron');
 const mainWindow = remote.getCurrentWindow();
 
 const Header = ({ setIsSettings, isSettings }) => {
-    const [status, setStatus] = useState(false);
-
     const handleMinimizeWindow = () => {
         mainWindow.hide();
-    };
-
-    const handleMaximizeWindow = () => {
-        if (status) {
-            mainWindow.unmaximize();
-            setStatus(!status);
-        } else {
-            mainWindow.maximize();
-            setStatus(!status);
-        }
     };
 
     const handleCloseWindow = () => {
@@ -54,21 +42,6 @@ const Header = ({ setIsSettings, isSettings }) => {
                     >
                         <i className="fal fa-window-minimize" />
                     </button>
-                    {!status ? (
-                        <button
-                            className={classes.btnWindow}
-                            onClick={handleMaximizeWindow}
-                        >
-                            <i className="fal fa-window-maximize" />
-                        </button>
-                    ) : (
-                        <button
-                            className={classes.btnWindow}
-                            onClick={handleMaximizeWindow}
-                        >
-                            <i className="fal fa-window-restore"></i>
-                        </button>
-                    )}
                     <button
                         className={
                             classes.btnWindow + ' ' + classes.closeWindow
