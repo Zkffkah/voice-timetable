@@ -11,27 +11,12 @@ body {
 }
 
 @font-face {
-    font-family: 'Digital-7';
-    src: url('/fonts/digital-7.eot');
-    src: url('/fonts/digital-7.eot?iefix') format('eot'),
-        url('/fonts/digital-7.woff') format('woff'),
-        url('/fonts/digital-7.ttf') format('truetype'),
-        url('/fonts/digital-7.svg#webfont') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
     font-family: 'Digital Numbers';
-    src: url('/fonts/digitalnumbers-regular.eot');
-    src: url('/fonts/digitalnumbers-regular.eot?iefix') format('eot'),
-        url('/fonts/digitalnumbers-regular.woff') format('woff'),
-        url('/fonts/digitalnumbers-regular.ttf') format('truetype'),
-        url('/fonts/digitalnumbers-regular.svg#webfont') format('svg');
+    src: url('./fonts/digitalnumbers-regular.eot');
+    src: url('./fonts/digitalnumbers-regular.eot?iefix') format('eot'),
+        url('./fonts/digitalnumbers-regular.woff') format('woff'),
+        url('./fonts/digitalnumbers-regular.ttf') format('truetype'),
+        url('./fonts/digitalnumbers-regular.svg#webfont') format('svg');
     font-weight: normal;
     font-style: normal;
-}
-
-::selection {
-    background-color: transparent;
 }

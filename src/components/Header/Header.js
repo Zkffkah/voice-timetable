@@ -34,7 +34,12 @@ const Header = ({ setIsSettings, isSettings }) => {
         <div className={classes.header}>
             <div className={classes.topBar}>
                 <div className={classes.title}>
-                    <i className="fas fa-podcast"></i> Voice Clock
+                    <img
+                        src="./icons/16x16.png"
+                        alt="Logo"
+                        className={classes.logo}
+                    />{' '}
+                    Voice Clock
                 </div>
                 <div>
                     <button
