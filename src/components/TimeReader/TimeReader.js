@@ -24,10 +24,8 @@ const template = {
     hour: ['00'],
 };
 
-const TextReader = ({ hours, min, currentTime }) => {
+const TextReader = ({ hours, min }) => {
     const voices = useRef(null);
-
-    const [text, setText] = useState(currentTime);
     const [rate, setRate] = useState(1);
     const [pitch, setPitch] = useState(1);
     const [volume, setVolume] = useState(1);
@@ -112,21 +110,10 @@ const TextReader = ({ hours, min, currentTime }) => {
         speechSynthesis.cancel();
     };
 
-    const handlerText = (e) => {
-        setText(e.target.value);
-        if (text === '') {
-        }
-        speechSynthesis.cancel();
-    };
-
     const handlerSelectTime = (e) => {
         e.stopPropagation();
         setPeriod(e.target.value);
     };
-
-    function handler(e) {
-        speechSynthesis.cancel();
-    }
 
     return (
         <div className={classes.settings}>
@@ -162,14 +149,6 @@ const TextReader = ({ hours, min, currentTime }) => {
                 </div>
 
                 <div className={classes.settingsRightColumn}>
-                    <input
-                        type="hidden"
-                        id="text"
-                        value={text}
-                        onChange={(e) => handlerText(e)}
-                        onClick={(e) => handler(e)}
-                    ></input>
-
                     <div className={classes.settingsRange}>
                         <label htmlFor="rate">
                             Rate: <b>{rate}</b>
@@ -217,7 +196,6 @@ const TextReader = ({ hours, min, currentTime }) => {
             </div>
             <button
                 className={classes.testButton}
-                disabled={!text ? true : false}
                 type="button"
                 id="button-speak"
                 onClick={() => handlerSpeak(`${hours}:${min}`)}

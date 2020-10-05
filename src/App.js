@@ -39,11 +39,7 @@ const App = () => {
                     isSettings ? null : classes.settingsContentHide,
                 ].join(' ')}
             >
-                <TimeReader
-                    hours={hours}
-                    min={min}
-                    currentTime={`${hours}:${min}`}
-                />
+                <TimeReader hours={hours} min={min} />
             </div>
         </main>
     );
