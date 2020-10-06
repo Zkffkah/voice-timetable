@@ -37,6 +37,20 @@ const TextReader = ({ hours, min }) => {
     const voicesAvailable = speechSynthesis.getVoices();
 
     useEffect(() => {
+        const getSettings = JSON.parse(localStorage.getItem('settings'));
+
+        if (getSettings === null) {
+            setLocalStorage();
+        } else {
+            setRate(getSettings.rate);
+            setPitch(getSettings.pitch);
+            setVolume(getSettings.volume);
+            setPeriod(getSettings.period);
+        }
+        // eslint-disable-next-line
+    }, []);
+
+    useEffect(() => {
         template[period].forEach((item) => {
             if (item === min) {
                 handlerSpeak(`${hours}:${min}`);
@@ -91,22 +105,37 @@ const TextReader = ({ hours, min }) => {
         speechSynthesis.speak(utterance);
     };
 
+    const setLocalStorage = () => {
+        localStorage.setItem(
+            'settings',
+            JSON.stringify({
+                rate: rate,
+                pitch: pitch,
+                volume: volume,
+                period: period,
+            }),
+        );
+    };
+
     const handlerVoice = () => {
         speechSynthesis.cancel();
     };
 
     const handlerRate = (e) => {
         setRate(e.target.value);
+        setLocalStorage();
         speechSynthesis.cancel();
     };
 
     const handlerPitch = (e) => {
         setPitch(e.target.value);
+        setLocalStorage();
         speechSynthesis.cancel();
     };
 
     const handlerVolume = (e) => {
         setVolume(e.target.value);
+        setLocalStorage();
         speechSynthesis.cancel();
     };
 
@@ -116,12 +145,15 @@ const TextReader = ({ hours, min }) => {
         setVolume(1);
         setPeriod('hour');
         injectVoices(voices.current, speechSynthesis.getVoices());
+        setLocalStorage();
         speechSynthesis.cancel();
     };
 
     const handlerSelectTime = (e) => {
         e.stopPropagation();
         setPeriod(e.target.value);
+        setLocalStorage();
+        speechSynthesis.cancel();
     };
 
     return (
@@ -137,15 +169,15 @@ const TextReader = ({ hours, min }) => {
                             value={period}
                         >
                             <option default value="hour">
-                                every hour
+                                Every Hour
                             </option>
-                            <option value="five">every five minutes</option>
-                            <option value="ten">every ten minutes</option>
+                            <option value="five">Every Five Minutes</option>
+                            <option value="ten">Every Ten Minutes</option>
                             <option value="fifteen">
-                                every fifteen minutes
+                                Every Fifteen Minutes
                             </option>
-                            <option value="twenty">every twenty minutes</option>
-                            <option value="thirty">every thirty minutes</option>
+                            <option value="twenty">Every Twenty Minutes</option>
+                            <option value="thirty">Every Thirty Minutes</option>
                         </select>
                     </div>
                     <div className={classes.settingsVoice}>
