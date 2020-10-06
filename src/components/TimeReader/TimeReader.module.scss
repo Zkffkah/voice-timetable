@@ -1,12 +1,12 @@
 .settingsContent {
     padding: 23px 0 0;
     display: flex;
-
 }
 
 .settings button {
-    display: block;
-    margin: -60px 0 0 10px;
+    display: inline-block;
+    margin-right: 8px;
+    margin-top: 4px;
 }
 
 .settingsMinutes {
@@ -17,7 +17,6 @@
 }
 
 .settingsMinutes li {
-
     margin: 0 0 10px;
     list-style: none;
 }
@@ -35,7 +34,7 @@
 
 .settingsVoice label,
 .settingsMinutes label {
-    font-size: .8em;
+    font-size: 0.8em;
     display: block;
     margin-bottom: 10px;
 }
@@ -52,7 +51,7 @@
 }
 
 .settingsRange label {
-    font-size: .8em;
+    font-size: 0.8em;
     display: block;
     padding-left: 3px;
     margin-bottom: 16px;
@@ -96,15 +95,15 @@
 }
 
 .testButton {
-    font-size: 1em;
-    padding: 8px 15px;
+    font-size: 0.9em;
+    padding: 8px 12px;
     border: 1px solid #3d3d3d;
     border-radius: 6px;
     color: #fff;
     background-color: #071925;
     cursor: pointer;
     outline: none;
-    transition: .3s all ease-in;
+    transition: 0.3s all ease-in;
 }
 
 .testButton:hover {

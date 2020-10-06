@@ -26,6 +26,7 @@ const template = {
 
 const TextReader = ({ hours, min }) => {
     const voices = useRef(null);
+
     const [rate, setRate] = useState(1);
     const [pitch, setPitch] = useState(1);
     const [volume, setVolume] = useState(1);
@@ -54,12 +55,10 @@ const TextReader = ({ hours, min }) => {
         voicesElement.innerHTML = voices
             .map((voice) => {
                 let option = document.createElement('option');
-
                 option.value = voice.lang;
                 option.textContent =
                     voice.name + (voice.default ? ' (default)' : '');
                 option.setAttribute('data-voice-uri', voice.voiceURI);
-
                 return option;
             })
             .map((option) => {
@@ -71,9 +70,10 @@ const TextReader = ({ hours, min }) => {
     const handlerSpeak = (time) => {
         let selectedOption =
             voices.current.options[voices.current.selectedIndex];
+
         let selectedVoice = speechSynthesis
             .getVoices()
-            .filter(function (voice) {
+            .filter((voice) => {
                 return (
                     voice.voiceURI ===
                     selectedOption.getAttribute('data-voice-uri')
@@ -110,6 +110,15 @@ const TextReader = ({ hours, min }) => {
         speechSynthesis.cancel();
     };
 
+    const handlerReset = (e) => {
+        setRate(1);
+        setPitch(1);
+        setVolume(1);
+        setPeriod('hour');
+        injectVoices(voices.current, speechSynthesis.getVoices());
+        speechSynthesis.cancel();
+    };
+
     const handlerSelectTime = (e) => {
         e.stopPropagation();
         setPeriod(e.target.value);
@@ -125,6 +134,7 @@ const TextReader = ({ hours, min }) => {
                             name="selectTime"
                             id="selectTime"
                             onChange={(e) => handlerSelectTime(e)}
+                            value={period}
                         >
                             <option default value="hour">
                                 every hour
@@ -146,6 +156,22 @@ const TextReader = ({ hours, min }) => {
                             onChange={handlerVoice}
                         ></select>
                     </div>
+                    <button
+                        className={classes.testButton}
+                        type="button"
+                        id="button-speak"
+                        onClick={() => handlerSpeak(`${hours}:${min}`)}
+                    >
+                        <i className="fas fa-play"></i> Test
+                    </button>
+                    <button
+                        className={classes.testButton}
+                        type="button"
+                        id="button-speak"
+                        onClick={handlerReset}
+                    >
+                        <i className="fas fa-redo-alt"></i> Reset
+                    </button>
                 </div>
 
                 <div className={classes.settingsRightColumn}>
@@ -194,14 +220,6 @@ const TextReader = ({ hours, min }) => {
                     </div>
                 </div>
             </div>
-            <button
-                className={classes.testButton}
-                type="button"
-                id="button-speak"
-                onClick={() => handlerSpeak(`${hours}:${min}`)}
-            >
-                <i className="fas fa-play"></i> Test
-            </button>
         </div>
     );
 };
