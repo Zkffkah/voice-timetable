@@ -1,12 +1,12 @@
 .clockContent {
-    margin-top: 65px;
+    margin-top: 70px;
+    cursor: default;
 }
 
 .digitalTime {
     display: flex;
     justify-content: center;
     margin-left: -25px;
-    /* font-family: Digital-7; */
     font-family: "Digital Numbers";
     font-size: 3.4em;
     letter-spacing: -0.1em;
@@ -26,7 +26,8 @@
 }
 
 .digitalDate {
-    margin-bottom: 15px;
+    margin-bottom: 8px;
+    color: #a5a8aa;
     font-size: 1.3em;
     text-align: center;
     text-shadow: 0 0 15px rgba(10, 175, 230, 1), 0 0 20px rgba(10, 175, 230, 0);

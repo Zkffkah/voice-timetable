@@ -10,10 +10,6 @@ const Header = ({ setIsSettings, isSettings }) => {
         mainWindow.hide();
     };
 
-    const handleCloseWindow = () => {
-        mainWindow.close();
-    };
-
     const handleIsSettings = () => {
         setIsSettings(!isSettings);
     };
@@ -41,14 +37,6 @@ const Header = ({ setIsSettings, isSettings }) => {
                         onClick={handleMinimizeWindow}
                     >
                         <i className="fal fa-window-minimize" />
-                    </button>
-                    <button
-                        className={
-                            classes.btnWindow + ' ' + classes.closeWindow
-                        }
-                        onClick={handleCloseWindow}
-                    >
-                        <i className="fal fa-window-close" />
                     </button>
                 </div>
             </div>

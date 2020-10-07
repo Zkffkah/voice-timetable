@@ -27,7 +27,6 @@
 		font-size: 16px;
 		font-weight: bold;
 		color: rgb(173, 173, 173);
-		;
 	}
 
 	.title i {
@@ -39,8 +38,7 @@
 		display: inline-block;
 	}
 
-	.btnWindow,
-	.closeWindow {
+	.btnWindow {
 		font-size: 17px;
 		margin: -5px 0;
 		padding: 9px 11px 8px;
@@ -56,9 +54,5 @@
 			color: #fff;
 			background-color: #081c2c;
 		}
-	}
-
-	.closeWindow:hover {
-		background-color: #f50a3d !important;
 	}
 }

@@ -27,10 +27,13 @@ const template = {
 const TextReader = ({ hours, min }) => {
     const voices = useRef(null);
 
-    const [rate, setRate] = useState(1);
-    const [pitch, setPitch] = useState(1);
-    const [volume, setVolume] = useState(1);
-    const [period, setPeriod] = useState('hour');
+    const [settings, setSettings] = useState({
+        rate: 1,
+        pitch: 1,
+        volume: 1,
+        period: 'hour',
+        voice: 0,
+    });
 
     const utterance = new SpeechSynthesisUtterance();
     // eslint-disable-next-line
@@ -42,28 +45,33 @@ const TextReader = ({ hours, min }) => {
         if (getSettings === null) {
             setLocalStorage();
         } else {
-            setRate(getSettings.rate);
-            setPitch(getSettings.pitch);
-            setVolume(getSettings.volume);
-            setPeriod(getSettings.period);
+            setSettings({
+                rate: getSettings.rate,
+                pitch: getSettings.pitch,
+                volume: getSettings.volume,
+                period: getSettings.period,
+                voice: getSettings.voice,
+            });
         }
         // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
-        template[period].forEach((item) => {
+        template[settings.period].forEach((item) => {
             if (item === min) {
                 handlerSpeak(`${hours}:${min}`);
             }
         });
         // eslint-disable-next-line
-    }, [period, hours, min, voices]);
+    }, [settings]);
 
     useEffect(() => {
         setTimeout(() => {
             injectVoices(voices.current, speechSynthesis.getVoices());
+            voices.current.selectedIndex = settings.voice;
         }, 1000);
-    }, [voices]);
+        // eslint-disable-next-line
+    }, [voices, settings]);
 
     const injectVoices = (voicesElement, voices) => {
         voicesElement.innerHTML = voices
@@ -98,61 +106,70 @@ const TextReader = ({ hours, min }) => {
         utterance.text = time;
         utterance.voice = selectedVoice;
         utterance.lang = selectedVoice.lang;
-        utterance.rate = rate;
-        utterance.pitch = pitch;
-        utterance.volume = volume;
+        utterance.rate = settings.rate;
+        utterance.pitch = settings.pitch;
+        utterance.volume = settings.volume;
 
         speechSynthesis.speak(utterance);
     };
 
     const setLocalStorage = () => {
-        localStorage.setItem(
-            'settings',
-            JSON.stringify({
-                rate: rate,
-                pitch: pitch,
-                volume: volume,
-                period: period,
-            }),
-        );
+        localStorage.setItem('settings', JSON.stringify(settings));
     };
 
     const handlerVoice = () => {
+        setSettings((set) => ({ ...set, voice: voices.current.selectedIndex }));
+        localStorage.setItem(
+            'settings',
+            JSON.stringify({
+                ...settings,
+                voice: voices.current.selectedIndex,
+            }),
+        );
         speechSynthesis.cancel();
     };
 
     const handlerRate = (e) => {
-        setRate(e.target.value);
+        let currentRate = e.target.value;
+        setSettings((set) => ({ ...set, rate: currentRate }));
         setLocalStorage();
         speechSynthesis.cancel();
     };
 
     const handlerPitch = (e) => {
-        setPitch(e.target.value);
+        let currentPitch = e.target.value;
+        setSettings((set) => ({ ...set, pitch: currentPitch }));
         setLocalStorage();
         speechSynthesis.cancel();
     };
 
     const handlerVolume = (e) => {
-        setVolume(e.target.value);
+        let currentVolume = e.target.value;
+        setSettings((set) => ({ ...set, volume: currentVolume }));
         setLocalStorage();
         speechSynthesis.cancel();
     };
 
     const handlerReset = (e) => {
-        setRate(1);
-        setPitch(1);
-        setVolume(1);
-        setPeriod('hour');
+        setSettings({
+            rate: 1,
+            pitch: 1,
+            volume: 1,
+            period: 'hour',
+            voice: 0,
+        });
         injectVoices(voices.current, speechSynthesis.getVoices());
         setLocalStorage();
         speechSynthesis.cancel();
     };
 
     const handlerSelectTime = (e) => {
-        e.stopPropagation();
-        setPeriod(e.target.value);
-        setLocalStorage();
+        let currentSelectTime = e.target.value;
+        setSettings((set) => ({ ...set, period: currentSelectTime }));
+        localStorage.setItem(
+            'settings',
+            JSON.stringify({ ...settings, period: currentSelectTime }),
+        );
         speechSynthesis.cancel();
     };
 
@@ -166,7 +183,7 @@ const TextReader = ({ hours, min }) => {
                             name="selectTime"
                             id="selectTime"
                             onChange={(e) => handlerSelectTime(e)}
-                            value={period}
+                            value={settings.period}
                         >
                             <option default value="hour">
                                 Every Hour
@@ -209,7 +226,7 @@ const TextReader = ({ hours, min }) => {
                 <div className={classes.settingsRightColumn}>
                     <div className={classes.settingsRange}>
                         <label htmlFor="rate">
-                            Rate: <b>{rate}</b>
+                            Rate: <b>{settings.rate}</b>
                         </label>
                         <input
                             className={classes.range}
@@ -217,13 +234,13 @@ const TextReader = ({ hours, min }) => {
                             id="rate"
                             min="0.1"
                             max="2"
-                            value={rate}
+                            value={settings.rate}
                             step="0.1"
                             onChange={(e) => handlerRate(e)}
                         />
 
                         <label htmlFor="pitch">
-                            Pitch: <b>{pitch}</b>
+                            Pitch: <b>{settings.pitch}</b>
                         </label>
                         <input
                             className={classes.range}
@@ -231,13 +248,13 @@ const TextReader = ({ hours, min }) => {
                             id="pitch"
                             min="0.1"
                             max="2"
-                            value={pitch}
+                            value={settings.pitch}
                             step="0.1"
                             onChange={(e) => handlerPitch(e)}
                         />
 
                         <label htmlFor="volume">
-                            Volume: <b>{volume}</b>
+                            Volume: <b>{settings.volume}</b>
                         </label>
                         <input
                             className={classes.range}
@@ -245,7 +262,7 @@ const TextReader = ({ hours, min }) => {
                             id="volume"
                             min="0.1"
                             max="2"
-                            value={volume}
+                            value={settings.volume}
                             step="0.1"
                             onChange={(e) => handlerVolume(e)}
                         />
