@@ -63,7 +63,7 @@ const TextReader = ({ hours, min }) => {
             }
         });
         // eslint-disable-next-line
-    }, [settings]);
+    }, [settings, hours, min]);
 
     useEffect(() => {
         setTimeout(() => {
