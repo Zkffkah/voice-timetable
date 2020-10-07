@@ -2,6 +2,8 @@
 
 Voice clock app for voice notification of the current time
 
+![alt text](/design/screen_1.png 'Voice Clock') ![alt text](/design/screen_2.png 'Voice Clock Settings')
+
 ### Download
 
 [VoiceClock Setup 0.1.0](http://bit.do/voiceclock-010) - (OS Windows, zip, 64 Mb)  
