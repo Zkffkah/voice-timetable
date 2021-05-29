@@ -1,16 +1,16 @@
 {
-    "name": "voice-clock",
-    "productName": "VoiceClock",
-    "description": "Voice clock app for voice notification of the current time",
+    "name": "voice-timetable",
+    "productName": "VoiceTimetable",
+    "description": "Voice timetable menubar app for voice notification of the current class",
     "version": "0.1.0",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/GrafSoul/voice-clock.git"
+        "url": "git+https://github.com/lowwor/voice-timetable.git"
     },
-    "author": "Dmitriy Zatulovskiy <grafsoul@gmail.com> (https://networkroom.ru)",
+    "author": "lowwor <lowwor@foxmail.com> (https://lowwor.com)",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/GrafSoul/voice-clock/issues"
+        "url": "https://github.com/lowwor/voice-timetable/issues"
     },
     "private": true,
     "dependencies": {
@@ -21,6 +21,7 @@
         "electron-reload": "^1.5.0",
         "electron-updater": "^4.3.4",
         "electron-window-state": "^5.0.3",
+        "menubar": "^9.0.3",
         "moment": "^2.29.0",
         "node-notifier": "^8.0.0",
         "node-sass": "^4.14.1",
@@ -71,6 +72,11 @@
             "node_modules/**/*",
             "package.json"
         ],
+        "mac": {
+            "extendInfo": {
+                "LSUIElement": 1
+            }
+        },
         "directories": {
             "buildResources": "assets"
         },

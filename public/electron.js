@@ -1,5 +1,6 @@
 'use strict';
-const { app, BrowserWindow, Tray, Menu } = require('electron');
+
+const { app, BrowserWindow, Tray, Menu ,nativeImage,ipcMain} = require('electron');
 const windowStateKeeper = require('electron-window-state');
 
 const {
@@ -30,8 +31,8 @@ const createWindow = async () => {
     installExtension(REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS);
 
     let mainWindowState = windowStateKeeper({
-        defaultWidth: 400,
-        defaultHeight: 250,
+        defaultWidth: isDev?800:400,
+        defaultHeight: isDev?400:250,
     });
 
     mainWindow = new BrowserWindow({
@@ -62,7 +63,7 @@ const createWindow = async () => {
     );
 
     mainWindow.once('ready-to-show', () => {
-        mainWindow.show();
+        // mainWindow.show();
         if (isDev) {
             installExtension(REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS);
             mainWindow.webContents.openDevTools();
@@ -72,35 +73,40 @@ const createWindow = async () => {
     mainWindow.on('closed', () => (mainWindow = null));
 
     // Tray ///////////////////////////////////////////////////////////
+    console.log(getIcon())
+    let trayIcon = nativeImage.createFromPath(`${path.join(__dirname, '/icons/IconTemplate.png')}`);
+    trayIcon = trayIcon.resize({
+       width: 16,
+       height: 16
+     });
+    tray = new Tray(trayIcon);
 
-    tray = new Tray(getIcon());
-
-    if (isDev) {
-        contextMenu = Menu.buildFromTemplate([
-            {
-                label: 'Developer Tools',
-                async click() {
-                    await installExtension(
-                        REACT_DEVELOPER_TOOLS,
-                        REDUX_DEVTOOLS,
-                    );
-                    mainWindow.toggleDevTools();
-                },
-            },
-            { type: 'separator' },
-            {
-                label: 'Exit',
-                role: 'quit',
-            },
-        ]);
-    } else {
-        contextMenu = Menu.buildFromTemplate([
-            {
-                label: 'Exit',
-                role: 'quit',
-            },
-        ]);
-    }
+    // if (isDev) {
+    //     contextMenu = Menu.buildFromTemplate([
+    //         {
+    //             label: 'Developer Tools',
+    //             async click() {
+    //                 await installExtension(
+    //                     REACT_DEVELOPER_TOOLS,
+    //                     REDUX_DEVTOOLS,
+    //                 );
+    //                 mainWindow.toggleDevTools();
+    //             },
+    //         },
+    //         { type: 'separator' },
+    //         {
+    //             label: 'Exit',
+    //             role: 'quit',
+    //         },
+    //     ]);
+    // } else {
+    //     contextMenu = Menu.buildFromTemplate([
+    //         {
+    //             label: 'Exit',
+    //             role: 'quit',
+    //         },
+    //     ]);
+    // }
 
     tray.on('click', () => {
         mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
@@ -108,7 +114,10 @@ const createWindow = async () => {
 
     tray.setToolTip('Voice Clock');
 
-    tray.setContextMenu(contextMenu);
+    // tray.setContextMenu(contextMenu);
+    ipcMain.on('update-title-tray-window-event', function(event, title) {
+        tray.setTitle(title);
+    });
 
     // Tray End ////////////////////////////////////////////////////////
 };
@@ -126,3 +135,9 @@ app.on('activate', () => {
         createWindow();
     }
 });
+if (!isDev) {
+    app.setLoginItemSettings({
+        openAtLogin: true,
+    })
+}
+
