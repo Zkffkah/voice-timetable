@@ -1,27 +1,50 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import classes from './TimeReader.module.scss';
+const electron = window.require('electron');
+const ipcRenderer  = electron.ipcRenderer;
 
-const template = {
-    five: [
-        '00',
-        '05',
-        '10',
-        '15',
-        '20',
-        '25',
-        '30',
-        '35',
-        '40',
-        '45',
-        '50',
-        '55',
+// const template = {
+//     five: [
+//         '00',
+//         '05',
+//         '10',
+//         '15',
+//         '20',
+//         '25',
+//         '30',
+//         '35',
+//         '40',
+//         '45',
+//         '50',
+//         '55',
+//     ],
+//     ten: ['00', '10', '20', '30', '40', '50'],
+//     fifteen: ['00', '15', '30', '45'],
+//     twenty: ['00', '20', '40'],
+//     thirty: ['00', '30'],
+//     hour: ['00'],
+// };
+
+const courseTemplate = {
+    morning: [
+        '09:25-10:05',
+        '10:15-10:55',
+        '11:05-11:45',
     ],
-    ten: ['00', '10', '20', '30', '40', '50'],
-    fifteen: ['00', '15', '30', '45'],
-    twenty: ['00', '20', '40'],
-    thirty: ['00', '30'],
-    hour: ['00'],
+    afternoon: [
+        '13:30-14:10',
+        '14:20-15:00',
+        '15:10-15:50',
+        '16:00-16:40',
+        '16:50-17:30',
+    ],
+    night: [
+        '19:25-20:05',
+        '20:15-20:55',
+        '21:05-21:45',
+    ],
+
 };
 
 const TextReader = ({ hours, min }) => {
@@ -30,7 +53,7 @@ const TextReader = ({ hours, min }) => {
     const [settings, setSettings] = useState({
         rate: 1,
         pitch: 1,
-        volume: 1,
+        volume: 0.1,
         period: 'hour',
         voice: 0,
     });
@@ -57,9 +80,34 @@ const TextReader = ({ hours, min }) => {
     }, []);
 
     useEffect(() => {
-        template[settings.period].forEach((item) => {
-            if (item === min) {
-                handlerSpeak(`${hours}:${min}`);
+        courseTemplate.morning.forEach((item, index) => {
+            if (hours === item.split('-')[0].split(':')[0] && item.split('-')[0].split(':')[1] === min) {
+                handlerSpeak(`现在的时间是${hours}:${min}，上午第${index + 1}节课上课啦，集中精神哦！`);
+                ipcRenderer.send('update-title-tray-window-event', item);
+            }
+
+            if (hours === item.split('-')[1].split(':')[0] && item.split('-')[1].split(':')[1] === min) {
+                handlerSpeak(`现在的时间是${hours}:${min}，上午第${index + 1}节课下课啦，休息一下吧！`);
+            }
+        });
+        courseTemplate.afternoon.forEach((item, index) => {
+            if (hours === item.split('-')[0].split(':')[0] && item.split('-')[0].split(':')[1] === min) {
+                handlerSpeak(`现在的时间是${hours}:${min}，下午第${index + 1}节课上课啦，集中精神哦！`);
+                ipcRenderer.send('update-title-tray-window-event', item);
+            }
+
+            if (hours === item.split('-')[1].split(':')[0] && item.split('-')[1].split(':')[1] === min) {
+                handlerSpeak(`现在的时间是${hours}:${min}，下午第${index + 1}节课下课啦，休息一下吧！`);
+            }
+        });
+        courseTemplate.night.forEach((item, index) => {
+            if (hours === item.split('-')[0].split(':')[0] && item.split('-')[0].split(':')[1] === min) {
+                handlerSpeak(`现在的时间是${hours}:${min}，晚上第${index + 1}节课上课啦，集中精神哦！`);
+                ipcRenderer.send('update-title-tray-window-event', item);
+            }
+
+            if (hours === item.split('-')[1].split(':')[0] && item.split('-')[1].split(':')[1] === min) {
+                handlerSpeak(`现在的时间是${hours}:${min}，晚上第${index + 1}节课下课啦，休息一下吧！`);
             }
         });
         // eslint-disable-next-line
@@ -90,18 +138,18 @@ const TextReader = ({ hours, min }) => {
     };
 
     const handlerSpeak = (time) => {
-        let selectedOption =
-            voices.current.options[voices.current.selectedIndex];
-
+        // let selectedOption =
+        //     voices.current.options[voices.current.selectedIndex];
+        //
         let selectedVoice = speechSynthesis
             .getVoices()
             .filter((voice) => {
                 return (
-                    voice.voiceURI ===
-                    selectedOption.getAttribute('data-voice-uri')
+                    voice.voiceURI === 'Mei-Jia'
                 );
             })
             .pop();
+        //     .getVoices())
 
         utterance.text = time;
         utterance.voice = selectedVoice;
@@ -154,7 +202,7 @@ const TextReader = ({ hours, min }) => {
         setSettings({
             rate: 1,
             pitch: 1,
-            volume: 1,
+            volume: 0.1,
             period: 'hour',
             voice: 0,
         });
